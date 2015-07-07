@@ -8,24 +8,13 @@ env:
     - DOCKER_HOST=tcp://$HOST_IP:2375
     - DOCKER_PORT_RANGE=2400:2500
     - SLIRP_PORTS=$(seq 2375 2500)
-  serverjre-8:
-    - DOCKERFILE_DIR=serverjre-8
-    - IMAGE_TAGS="latest 8 8u45 serverjre-8 serverjre-8u45"
-  serverjre-7:
-    - DOCKERFILE_DIR=serverjre-7
-    - IMAGE_TAGS="7 7u80 serverjre-7 serverjre-7u80"
-  jdk-8:
-    - DOCKERFILE_DIR=jdk-8
-    - IMAGE_TAGS="jdk-8 jdk-8u45"
-  jdk-7:
-    - DOCKERFILE_DIR=jdk-7
-    - IMAGE_TAGS="jdk-7 jdk-7u80"
-  jre-8:
-    - DOCKERFILE_DIR=jre-8
-    - IMAGE_TAGS="jre-8 jre-8u45"
-  jre-7:
-    - DOCKERFILE_DIR=jre-7
-    - IMAGE_TAGS="jre-7 jre-7u80"
+  matrix:
+    - DOCKERFILE_DIR=serverjre-8 IMAGE_TAGS="latest 8 8u45 serverjre-8 serverjre-8u45"
+    - DOCKERFILE_DIR=serverjre-7 IMAGE_TAGS="7 7u80 serverjre-7 serverjre-7u80"
+    - DOCKERFILE_DIR=jdk-8 IMAGE_TAGS="jdk-8 jdk-8u45"
+    - DOCKERFILE_DIR=jdk-7 IMAGE_TAGS="jdk-7 jdk-7u80"
+    - DOCKERFILE_DIR=jre-8 IMAGE_TAGS="jre-8 jre-8u45"
+    - DOCKERFILE_DIR=jre-7 IMAGE_TAGS="jre-7 jre-7u80"
 
 before_install:
   - sudo sh -c "wget -qO- https://get.docker.com/gpg | apt-key add -"
