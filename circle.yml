@@ -1,0 +1,36 @@
+machine:
+  environment:
+    IMAGE_NAME: java
+    IMAGE_TAGS_SERVERJRE: "latest 8 8u60 serverjre-8 serverjre-8u60"
+    IMAGE_TAGS_JDK: "jdk-8 jdk-8u60"
+    IMAGE_TAGS_JRE: "jre-8 jre-8u60"
+    IMAGE_OWNER: jeanblanchard
+    # HUB_USERNAME, HUB_PASSWORD and HUB_EMAIL should be configured from the CircleCI project settings
+  services:
+    - docker
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+dependencies:
+  override:
+    - docker info
+    - build/build.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}" --dir=serverjre
+    - build/build.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}" --dir=jdk
+    - build/build.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}" --dir=jre
+
+test:
+  override:
+    - ./test.sh --image-name=java-serverjre
+    - ./test.sh --image-name=java-jdk
+    - ./test.sh --image-name=java-jre
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}" --dir=serverjre
+      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}" --dir=jdk
+      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}" --dir=jre

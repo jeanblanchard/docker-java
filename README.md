@@ -1,4 +1,4 @@
-## Minimal Docker image with Java [![Build Status](https://travis-ci.org/jeanblanchard/docker-java.svg?branch=master)](https://travis-ci.org/jeanblanchard/docker-java)
+## Minimal Docker image with Java [![Circle CI](https://circleci.com/gh/jeanblanchard/docker-java/tree/master.svg?style=shield)](https://circleci.com/gh/jeanblanchard/docker-java/tree/master)
 
 Basic [Docker](https://www.docker.com/) image to run [Java](https://www.java.com/) applications.
 This is based on [Alpine Linux](http://alpinelinux.org/) to keep the size minimal (about 25% of an ubuntu-based image).
