@@ -31,9 +31,9 @@ deployment:
   hub:
     branch: master
     commands:
-      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}" --dir=serverjre
-      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}" --dir=jdk
-      - build/publish.sh --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}" --dir=jre
+      - build/publish.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}"
+      - build/publish.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}"
+      - build/publish.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}"
       - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/master?circle-token=${TOMCAT_TOKEN}; fi
       - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/tomcat7?circle-token=${TOMCAT_TOKEN}; fi
       - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/tomcat6?circle-token=${TOMCAT_TOKEN}; fi
