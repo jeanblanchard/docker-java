@@ -2,20 +2,19 @@ FROM jeanblanchard/alpine-glibc
 MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
-ENV JAVA_VERSION_MAJOR 8
-ENV JAVA_VERSION_MINOR 74
-ENV JAVA_VERSION_BUILD 02
+ENV JAVA_VERSION_MAJOR 9
+ENV JAVA_VERSION_BUILD 104
 ENV JAVA_PACKAGE       jre
-ENV JAVA_SHA256_SUM    9c8663a5a67429d423ed1da554a7f93d1c7e50f6bb4bc5e0bbde1f512cf36d95
+ENV JAVA_MD5_SUM       d267e35fcfef2e4c7d1ac98b7c6a7bef
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
   mkdir -p /opt &&\
-  curl -jkLH "Cookie: oraclelicense=accept-securebackup-cookie" -o java.tar.gz\
-    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz &&\
-  echo "$JAVA_SHA256_SUM  java.tar.gz" | sha256sum -c - &&\
+  curl -jkL -o java.tar.gz\
+    http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz &&\
+  echo "$JAVA_MD5_SUM  java.tar.gz" | md5sum -c - &&\
   gunzip -c java.tar.gz | tar -xf - -C /opt && rm -f java.tar.gz &&\
-  ln -s /opt/jre1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} /opt/jre &&\
+  ln -s /opt/jre-${JAVA_VERSION_MAJOR} /opt/jre &&\
   rm -rf /opt/jre/lib/plugin.jar \
          /opt/jre/lib/ext/jfxrt.jar \
          /opt/jre/bin/javaws \

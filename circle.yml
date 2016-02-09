@@ -1,9 +1,8 @@
 machine:
   environment:
     IMAGE_NAME: java
-    IMAGE_TAGS_SERVERJRE: "latest 8 8u74 serverjre-8 serverjre-8u74"
-    IMAGE_TAGS_JDK: "jdk-8 jdk-8u74"
-    IMAGE_TAGS_JRE: "jre-8 jre-8u74"
+    IMAGE_TAGS_JDK: "experimental-jdk jdk-9-ea"
+    IMAGE_TAGS_JRE: "experimental-jre jre-9-ea"
     IMAGE_OWNER: jeanblanchard
     # HUB_USERNAME, HUB_PASSWORD and HUB_EMAIL should be configured from the CircleCI project settings
   services:
@@ -17,23 +16,17 @@ checkout:
 dependencies:
   override:
     - docker info
-    - build/build.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}" --dir=serverjre
     - build/build.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}" --dir=jdk
     - build/build.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}" --dir=jre
 
 test:
   override:
-    - ./test.sh --image-name=java-serverjre
     - ./test.sh --image-name=java-jdk
     - ./test.sh --image-name=java-jre
 
 deployment:
   hub:
-    branch: master
+    branch: java9
     commands:
-      - build/publish.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}"
       - build/publish.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}"
       - build/publish.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}"
-      - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/master?circle-token=${TOMCAT_TOKEN}; fi
-      - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/tomcat7?circle-token=${TOMCAT_TOKEN}; fi
-      - if [ -n "${TOMCAT_TOKEN}" ]; then curl -X POST https://circleci.com/api/v1/project/jeanblanchard/docker-tomcat/tree/tomcat6?circle-token=${TOMCAT_TOKEN}; fi
