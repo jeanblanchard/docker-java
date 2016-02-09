@@ -11,7 +11,7 @@ You must accept the [Oracle Binary Code License Agreement for Java SE](http://ww
 * `jdk-8`: Oracle Java 8 (JDK)
 * `jre-8`: Oracle Java 8 (JRE)
 
-Experimental tags (early access) (You must accept the [Early Adopter Development License Agreement for Java SE](http://www.oracle.com/technetwork/licenses/ea-license-152003.html) to use this tags):
+Experimental tags (early access) (You must accept the [Early Adopter Development License Agreement for Java SE](http://www.oracle.com/technetwork/licenses/ea-license-152003.html) to use these tags):
 
 * `experimental-jdk` or `jdk-9-ea`: Oracle JDK 9 Early Access Release
 * `experimental-jre` or `jre-9-ea`: Oracle JRE 9 Early Access Release
