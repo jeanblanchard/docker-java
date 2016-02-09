@@ -6,13 +6,15 @@ ENV JAVA_VERSION_MAJOR 8
 ENV JAVA_VERSION_MINOR 74
 ENV JAVA_VERSION_BUILD 02
 ENV JAVA_PACKAGE       server-jre
+ENV JAVA_SHA256_SUM    d0d9080dfb0c167fe20886c8fffc1fdd37228cc03e6241d7d6540eaa736499b7
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
   mkdir -p /opt &&\
-  curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie"\
-    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
-    | gunzip -c - | tar -xf - -C /opt &&\
+  curl -jkLH "Cookie: oraclelicense=accept-securebackup-cookie" -o java.tar.gz\
+    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz &&\
+  echo "$JAVA_SHA256_SUM  java.tar.gz" | sha256sum -c - &&\
+  gunzip -c java.tar.gz | tar -xf - -C /opt && rm -f java.tar.gz &&\
   ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} /opt/jdk &&\
   rm -rf /opt/jdk/*src.zip \
          /opt/jdk/lib/missioncontrol \
