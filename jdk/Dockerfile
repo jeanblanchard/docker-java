@@ -3,9 +3,9 @@ MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
 ENV JAVA_VERSION_MAJOR 9
-ENV JAVA_VERSION_BUILD 104
+ENV JAVA_VERSION_BUILD 115
 ENV JAVA_PACKAGE       jdk
-ENV JAVA_MD5_SUM       7f779e68eb778bb57a294d5e1f162649
+ENV JAVA_MD5_SUM       b9e2aa269bf9e89a04ae167129d3cafc
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
