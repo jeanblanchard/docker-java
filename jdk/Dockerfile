@@ -3,17 +3,17 @@ MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
 ENV JAVA_VERSION_MAJOR 9
-ENV JAVA_VERSION_BUILD 115
-ENV JAVA_PACKAGE       jdk
-ENV JAVA_MD5_SUM       b9e2aa269bf9e89a04ae167129d3cafc
+ENV JAVA_VERSION_BUILD 116
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
   mkdir -p /opt &&\
-  curl -jkL -o java.tar.gz\
-    http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz &&\
-  echo "$JAVA_MD5_SUM  java.tar.gz" | md5sum -c - &&\
-  gunzip -c java.tar.gz | tar -xf - -C /opt && rm -f java.tar.gz &&\
+  curl -LO http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz &&\
+  curl -LO http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  sed 's/md5 (\(.*\)) = \(.*\)/\2  \1/' -i jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  md5sum -c jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  gunzip -c jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz | tar -xf - -C /opt &&\
+  rm -f jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz jdk-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
   ln -s /opt/jdk-${JAVA_VERSION_MAJOR} /opt/jdk &&\
   rm -rf /opt/jdk/*src.zip \
          /opt/jdk/lib/missioncontrol \

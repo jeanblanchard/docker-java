@@ -3,17 +3,17 @@ MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
 ENV JAVA_VERSION_MAJOR 9
-ENV JAVA_VERSION_BUILD 115
-ENV JAVA_PACKAGE       jre
-ENV JAVA_MD5_SUM       5a51a7ae4cd61230fd0c341c5e138c36
+ENV JAVA_VERSION_BUILD 116
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
   mkdir -p /opt &&\
-  curl -jkL -o java.tar.gz\
-    http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz &&\
-  echo "$JAVA_MD5_SUM  java.tar.gz" | md5sum -c - &&\
-  gunzip -c java.tar.gz | tar -xf - -C /opt && rm -f java.tar.gz &&\
+  curl -LO http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz &&\
+  curl -LO http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  sed 's/md5 (\(.*\)) = \(.*\)/\2  \1/' -i jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  md5sum -c jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
+  gunzip -c jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz | tar -xf - -C /opt &&\
+  rm -f jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.tar.gz jre-${JAVA_VERSION_MAJOR}-ea+${JAVA_VERSION_BUILD}_linux-x64_bin.md5 &&\
   ln -s /opt/jre-${JAVA_VERSION_MAJOR} /opt/jre &&\
   rm -rf /opt/jre/lib/plugin.jar \
          /opt/jre/lib/ext/jfxrt.jar \
@@ -37,4 +37,3 @@ RUN apk add --update curl &&\
 # Set environment
 ENV JAVA_HOME /opt/jre
 ENV PATH ${PATH}:${JAVA_HOME}/bin
-
