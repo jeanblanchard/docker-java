@@ -16,6 +16,10 @@ RUN apk add --update curl &&\
   echo "$JAVA_SHA256_SUM  java.tar.gz" | sha256sum -c - &&\
   gunzip -c java.tar.gz | tar -xf - -C /opt && rm -f java.tar.gz &&\
   ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} /opt/jdk &&\
+  curl -jkLH "Cookie: oraclelicense=accept-securebackup-cookie" -o jce_policy-8.zip http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip &&\
+  unzip jce_policy-8.zip -d /tmp &&\
+  cp /tmp/UnlimitedJCEPolicyJDK8/*.jar /opt/jdk/jre/lib/security/ &&\
+  rm -rf jce_policy-8.zip /tmp/UnlimitedJCEPolicyJDK8 &&\
   rm -rf /opt/jdk/*src.zip \
          /opt/jdk/lib/missioncontrol \
          /opt/jdk/lib/visualvm \
