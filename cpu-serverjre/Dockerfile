@@ -3,10 +3,10 @@ MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
 ENV JAVA_VERSION_MAJOR 8
-ENV JAVA_VERSION_MINOR 102
+ENV JAVA_VERSION_MINOR 111
 ENV JAVA_VERSION_BUILD 14
-ENV JAVA_PACKAGE       jdk
-ENV JAVA_SHA256_SUM    7cfbe0bc0391a4abe60b3e9eb2a541d2315b99b9cb3a24980e618a89229e04b7
+ENV JAVA_PACKAGE       server-jre
+ENV JAVA_SHA256_SUM    53442420cd9534ded4beca16c32c1d109cf5add637db764c86660c6eea1d88d4
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
