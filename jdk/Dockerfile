@@ -3,7 +3,7 @@ MAINTAINER Jean Blanchard <jean@blanchard.io>
 
 # Java Version
 ENV JAVA_VERSION_MAJOR 9
-ENV JAVA_VERSION_BUILD 152
+ENV JAVA_VERSION_BUILD 166
 
 # Download and unarchive Java
 RUN apk add --update curl &&\
