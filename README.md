@@ -5,16 +5,16 @@ This is based on [Alpine Linux](http://alpinelinux.org/) to keep the size minima
 
 ### Tags
 
-* `latest` or `8` or `serverjre-8`: Oracle Java 8 (Server JRE)
-* `jdk-8`: Oracle Java 8 (JDK)
-* `jre-8`: Oracle Java 8 (JRE)
+* `latest` or `8` or `serverjre-8`: Oracle Java 8 (Server JRE) [![](https://images.microbadger.com/badges/image/jeanblanchard/java.svg)](https://microbadger.com/images/jeanblanchard/java "Get your own image badge on microbadger.com")
+* `jdk-8`: Oracle Java 8 (JDK) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jdk-8.svg)](https://microbadger.com/images/jeanblanchard/java:jdk-8 "Get your own image badge on microbadger.com")
+* `jre-8`: Oracle Java 8 (JRE) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jre-8.svg)](https://microbadger.com/images/jeanblanchard/java:jre-8 "Get your own image badge on microbadger.com")
 
 Please note that Java 7 is unsupported by Oracle, as of April 2015, so the following tags
 will not be updated past version 7u80, which has know security issues:
 
-* `7` or `serverjre-7`: Oracle Java 7 (Server JRE)
-* `jdk-7`: Oracle Java 7 (JDK)
-* `jre-7`: Oracle Java 7 (JRE)
+* `7` or `serverjre-7`: Oracle Java 7 (Server JRE) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:7.svg)](https://microbadger.com/images/jeanblanchard/java:7 "Get your own image badge on microbadger.com")
+* `jdk-7`: Oracle Java 7 (JDK) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jdk-7.svg)](https://microbadger.com/images/jeanblanchard/java:jdk-7 "Get your own image badge on microbadger.com")
+* `jre-7`: Oracle Java 7 (JRE) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jre-7.svg)](https://microbadger.com/images/jeanblanchard/java:jre-7 "Get your own image badge on microbadger.com")
 
 Additionally, tags are created for each oracle release (e.g. `8u121`, `jdk-8u121` or `jre-8u121`).
 
