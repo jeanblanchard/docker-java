@@ -9,7 +9,7 @@ This is based on [Alpine Linux](http://alpinelinux.org/) to keep the size minima
 * [`jdk-8`](https://github.com/jeanblanchard/docker-java/blob/master/jdk/Dockerfile): Oracle Java 8 (JDK) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jdk-8.svg)](https://microbadger.com/images/jeanblanchard/java:jdk-8 "Get your own image badge on microbadger.com")
 * [`jre-8`](https://github.com/jeanblanchard/docker-java/blob/master/jre/Dockerfile): Oracle Java 8 (JRE) [![](https://images.microbadger.com/badges/image/jeanblanchard/java:jre-8.svg)](https://microbadger.com/images/jeanblanchard/java:jre-8 "Get your own image badge on microbadger.com")
 
-Additionally, tags are created for each oracle release (e.g. `8u141`, `jdk-8u141` or `jre-8u141`).
+Additionally, tags are created for each oracle release (e.g. `8u144`, `jdk-8u144` or `jre-8u144`).
 
 ### Usage
 
