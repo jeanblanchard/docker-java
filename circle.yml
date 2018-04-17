@@ -1,12 +1,12 @@
 machine:
   environment:
     IMAGE_NAME: java
-    IMAGE_TAGS_SERVERJRE: "latest 8 8u161 serverjre-8 serverjre-8u161"
-    IMAGE_TAGS_JDK: "jdk-8 jdk-8u161"
-    IMAGE_TAGS_JRE: "jre-8 jre-8u161"
-    IMAGE_TAGS_PSU_SERVERJRE: "8u162 serverjre-8u162"
-    IMAGE_TAGS_PSU_JDK: "jdk-8u162"
-    IMAGE_TAGS_PSU_JRE: "jre-8u162"
+    IMAGE_TAGS_SERVERJRE: "latest 8 8u171 serverjre-8 serverjre-8u171"
+    IMAGE_TAGS_JDK: "jdk-8 jdk-8u171"
+    IMAGE_TAGS_JRE: "jre-8 jre-8u171"
+    IMAGE_TAGS_PSU_SERVERJRE: "8u172 serverjre-8u172"
+    IMAGE_TAGS_PSU_JDK: "jdk-8u172"
+    IMAGE_TAGS_PSU_JRE: "jre-8u172"
     IMAGE_OWNER: jeanblanchard
     # HUB_USERNAME, HUB_PASSWORD and HUB_EMAIL should be configured from the CircleCI project settings
   services:
