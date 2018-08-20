@@ -1,0 +1,134 @@
+jobConfig: &jobConfig
+  parallelism: 3
+  environment:
+    IMAGE_NAME: java
+    IMAGE_TAGS_SERVERJRE: "latest 8 8u181 serverjre-8 serverjre-8u181"
+    IMAGE_TAGS_JDK: "jdk-8 jdk-8u181"
+    IMAGE_TAGS_JRE: "jre-8 jre-8u181"
+    IMAGE_OWNER: jeanblanchard
+    # HUB_USERNAME and HUB_PASSWORD should be configured from the CircleCI project settings
+  docker:
+  - image: circleci/buildpack-deps:stretch
+
+version: 2
+jobs:
+  build_jdk:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}" --dir=jdk
+      - run: ./test.sh --image-name=java-jdk
+      - run: docker save java-jdk > java-jdk.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-jdk.tar
+
+  build_jre:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}" --dir=jre
+      - run: ./test.sh --image-name=java-jre
+      - run: docker save java-jre > java-jre.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-jre.tar
+
+  build_serverjre:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}" --dir=serverjre
+      - run: ./test.sh --image-name=java-serverjre
+      - run: docker save java-serverjre > java-serverjre.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-serverjre.tar
+
+  deploy_jdk:
+    <<: *jobConfig
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run: docker load < java-jdk.tar
+      - run: build/publish.sh --local-name=java-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JDK}"
+
+  deploy_jre:
+    <<: *jobConfig
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run: docker load < java-jre.tar
+      - run: build/publish.sh --local-name=java-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_JRE}"
+
+  deploy_serverjre:
+    <<: *jobConfig
+    steps:
+    - attach_workspace:
+        at: .
+    - setup_remote_docker
+    - run: docker load < java-serverjre.tar
+    - run: build/publish.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}"
+
+  trigger_downstream:
+    <<: *jobConfig
+    steps:
+      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/master; fi
+      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat8.0; fi
+      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat7; fi
+      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat6; fi
+      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat9; fi
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_jdk
+      - build_jre
+      - build_serverjre
+      - deploy_jdk:
+          requires:
+            - build_jdk
+          filters:
+            branches:
+              only: master
+      - deploy_jre:
+          requires:
+            - build_jre
+          filters:
+            branches:
+              only: master
+      - deploy_serverjre:
+          requires:
+            - build_serverjre
+          filters:
+            branches:
+              only: master
+      - trigger_downstream:
+          requires:
+            - deploy_jdk
+            - deploy_jre
+            - deploy_serverjre
+          filters:
+            branches:
+              only: master
