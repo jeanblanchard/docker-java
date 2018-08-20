@@ -1,5 +1,5 @@
 jobConfig: &jobConfig
-  parallelism: 3
+  parallelism: 1
   environment:
     IMAGE_NAME: java
     IMAGE_TAGS_SERVERJRE: "latest 8 8u181 serverjre-8 serverjre-8u181"
@@ -93,11 +93,9 @@ jobs:
   trigger_downstream:
     <<: *jobConfig
     steps:
-      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/master; fi
-      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat8.0; fi
-      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat7; fi
-      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat6; fi
-      - run: if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat9; fi
+      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/master; fi'
+      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat7; fi'
+      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat8; fi'
 
 workflows:
   version: 2
