@@ -90,13 +90,6 @@ jobs:
     - run: docker load < java-serverjre.tar
     - run: build/publish.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}"
 
-  trigger_downstream:
-    <<: *jobConfig
-    steps:
-      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/master; fi'
-      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat7; fi'
-      - run: 'if [ -n "${TOMCAT_TOKEN}" ]; then curl --user ${TOMCAT_TOKEN}: -X POST https://circleci.com/api/v1.1/project/github/jeanblanchard/docker-tomcat/tree/tomcat8; fi'
-
 workflows:
   version: 2
   build_and_deploy:
@@ -119,14 +112,6 @@ workflows:
       - deploy_serverjre:
           requires:
             - build_serverjre
-          filters:
-            branches:
-              only: master
-      - trigger_downstream:
-          requires:
-            - deploy_jdk
-            - deploy_jre
-            - deploy_serverjre
           filters:
             branches:
               only: master
