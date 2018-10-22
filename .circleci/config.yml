@@ -2,9 +2,12 @@ jobConfig: &jobConfig
   parallelism: 1
   environment:
     IMAGE_NAME: java
-    IMAGE_TAGS_SERVERJRE: "latest 8 8u181 serverjre-8 serverjre-8u181"
-    IMAGE_TAGS_JDK: "jdk-8 jdk-8u181"
-    IMAGE_TAGS_JRE: "jre-8 jre-8u181"
+    IMAGE_TAGS_SERVERJRE: "latest 8 8u191 serverjre-8 serverjre-8u191"
+    IMAGE_TAGS_JDK: "jdk-8 jdk-8u191"
+    IMAGE_TAGS_JRE: "jre-8 jre-8u191"
+    IMAGE_TAGS_PSU_SERVERJRE: "8 8u192 serverjre-8u192"
+    IMAGE_TAGS_PSU_JDK: "jdk-8u192"
+    IMAGE_TAGS_PSU_JRE: "jre-8u192"
     IMAGE_OWNER: jeanblanchard
     # HUB_USERNAME and HUB_PASSWORD should be configured from the CircleCI project settings
   docker:
@@ -63,6 +66,57 @@ jobs:
             - build/*.sh
             - java-serverjre.tar
 
+  build_psu_jdk:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-psu-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_JDK}" --dir=psu-jdk
+      - run: ./test.sh --image-name=java-psu-jdk
+      - run: docker save java-psu-jdk > java-psu-jdk.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-psu-jdk.tar
+
+  build_psu_jre:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-psu-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_JRE}" --dir=psu-jre
+      - run: ./test.sh --image-name=java-psu-jre
+      - run: docker save java-psu-jre > java-psu-jre.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-psu-jre.tar
+
+  build_psu_serverjre:
+    <<: *jobConfig
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker
+      - run: docker info
+      - run: build/build.sh --local-name=java-psu-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_SERVERJRE}" --dir=psu-serverjre
+      - run: ./test.sh --image-name=java-psu-serverjre
+      - run: docker save java-psu-serverjre > java-psu-serverjre.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*.sh
+            - java-psu-serverjre.tar
+
   deploy_jdk:
     <<: *jobConfig
     steps:
@@ -90,6 +144,33 @@ jobs:
     - run: docker load < java-serverjre.tar
     - run: build/publish.sh --local-name=java-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_SERVERJRE}"
 
+  deploy_psu_jdk:
+    <<: *jobConfig
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run: docker load < java-psu-jdk.tar
+      - run: build/publish.sh --local-name=java-psu-jdk --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_JDK}"
+
+  deploy_psu_jre:
+    <<: *jobConfig
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run: docker load < java-psu-jre.tar
+      - run: build/publish.sh --local-name=java-psu-jre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_JRE}"
+
+  deploy_psu_serverjre:
+    <<: *jobConfig
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run: docker load < java-psu-serverjre.tar
+      - run: build/publish.sh --local-name=java-psu-serverjre --image-name=${IMAGE_NAME} --image-owner=${IMAGE_OWNER} --image-tags="${IMAGE_TAGS_PSU_SERVERJRE}"
+
 workflows:
   version: 2
   build_and_deploy:
@@ -97,6 +178,9 @@ workflows:
       - build_jdk
       - build_jre
       - build_serverjre
+      - build_psu_jdk
+      - build_psu_jre
+      - build_psu_serverjre
       - deploy_jdk:
           requires:
             - build_jdk
@@ -112,6 +196,24 @@ workflows:
       - deploy_serverjre:
           requires:
             - build_serverjre
+          filters:
+            branches:
+              only: master
+      - deploy_psu_jdk:
+          requires:
+            - build_psu_jdk
+          filters:
+            branches:
+              only: master
+      - deploy_psu_jre:
+          requires:
+            - build_psu_jre
+          filters:
+            branches:
+              only: master
+      - deploy_psu_serverjre:
+          requires:
+            - build_psu_serverjre
           filters:
             branches:
               only: master
