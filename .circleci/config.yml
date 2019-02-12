@@ -2,12 +2,12 @@ jobConfig: &jobConfig
   parallelism: 1
   environment:
     IMAGE_NAME: java
-    IMAGE_TAGS_SERVERJRE: "latest 8 8u191 serverjre-8 serverjre-8u191"
-    IMAGE_TAGS_JDK: "jdk-8 jdk-8u191"
-    IMAGE_TAGS_JRE: "jre-8 jre-8u191"
-    IMAGE_TAGS_PSU_SERVERJRE: "8 8u192 serverjre-8u192"
-    IMAGE_TAGS_PSU_JDK: "jdk-8u192"
-    IMAGE_TAGS_PSU_JRE: "jre-8u192"
+    IMAGE_TAGS_SERVERJRE: "latest 8 8u201 serverjre-8 serverjre-8u201"
+    IMAGE_TAGS_JDK: "jdk-8 jdk-8u201"
+    IMAGE_TAGS_JRE: "jre-8 jre-8u201"
+    IMAGE_TAGS_PSU_SERVERJRE: "8 8u202 serverjre-8u202"
+    IMAGE_TAGS_PSU_JDK: "jdk-8u202"
+    IMAGE_TAGS_PSU_JRE: "jre-8u202"
     IMAGE_OWNER: jeanblanchard
     # HUB_USERNAME and HUB_PASSWORD should be configured from the CircleCI project settings
   docker:
