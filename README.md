@@ -1,4 +1,8 @@
-## Minimal Docker image with Java [![Circle CI](https://circleci.com/gh/jeanblanchard/docker-java/tree/master.svg?style=shield)](https://circleci.com/gh/jeanblanchard/docker-java/tree/master)
+## Minimal Docker image with Java
+
+> :warning: **Deprecated**: This is not maintained any more, and references Oracle JDK, which no longer allows free usage and redistribution.
+> 
+> Alternatives exist, such as [Eclipe Adoptium Temurin](https://hub.docker.com/_/eclipse-temurin) (Formerly AdoptOpenJDK)
 
 Basic [Docker](https://www.docker.com/) image to run [Java](https://www.java.com/) applications.
 This is based on [Alpine Linux](http://alpinelinux.org/) to keep the size minimal (about 25% of an ubuntu-based image).
